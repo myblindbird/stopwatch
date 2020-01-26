@@ -8,14 +8,14 @@ def Main():
     root.title("Stopwatch")
     width = 600
     height = 200
-    screen_width = root.winfo_scrSZSZAzzzzzzzzzzzzzeenwidth()
+    screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
     root.geometry("%dx%d+%d+%d" % (width, height, x, y))
     Top = Frame(root, width=600)
     Top.pack(side=TOP)
-    stopWatch = Stopwatch(root)
+    stopWatch = StopWatch(root)
     stopWatch.pack(side=TOP)
     Bottom = Frame(root, width=600)
     Bottom.pack(side=BOTTOM)
@@ -33,7 +33,7 @@ def Main():
     root.mainloop()
 
 
-class Stopwatch(Frame):
+class StopWatch(Frame):
 
     def __init__(self, parent=None, **kw):
         Frame.__init__(self, parent, kw)
@@ -58,20 +58,19 @@ class Stopwatch(Frame):
         seconds = int(nextElap - minutes * 60.0)
         miliSeconds = int((nextElap - minutes * 60.0 - seconds) * 100)
         self.timestr.set('%02d:%02d:%02d' % (minutes, seconds, miliSeconds))
-        
-        
-   def Stop(self):
-        if self.onRunning:
-            self.after_cancel(self.timer)
-            self.nextTime = time.time() - self.startTime
-            self.SetTime(self.nextTime)
-            self.onRunning = 0
-            
+
     def Start(self):
         if not self.onRunning:
             self.startTime = time.time() - self.nextTime
             self.Updater()
             self.onRunning = 1
+
+    def Stop(self):
+        if self.onRunning:
+            self.after_cancel(self.timer)
+            self.nextTime = time.time() - self.startTime
+            self.SetTime(self.nextTime)
+            self.onRunning = 0
 
     def Exit(self):
             root.destroy()
